@@ -1,4 +1,4 @@
-# go_read_conf
+# Go example - read yml
 Golang, read configuration parameters from .yaml file
 
 ## test yaml
