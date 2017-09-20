@@ -1,4 +1,6 @@
-# Golang: execute command and show results, without waiting to finish
+# Golang: execute command and display output
+
+## 1. waits for the command to finish
 
 The first approach runs `ping -c 4 8.8.8.8`, and the result is being printed after it finishes:
 
@@ -7,6 +9,8 @@ out, err := exec.Command("bash", "-c", "ping -c 4 8.8.8.8").Output()
 check(err)
 fmt.Printf("command output:\n%s\n", out)
 ```
+
+## 2. without waiting... (A)
 
 The second approach runs the same command and prints lines while the execution takes place:
 
@@ -34,4 +38,40 @@ for {
 		fmt.Print(string(b[:n]))
 	}
 }
+```
+
+## 3. without waiting... (B)
+
+The following is a slightly modified version of the example found at ["Shelled-out Commands In Golang"](https://nathanleclaire.com/blog/2014/12/29/shelled-out-commands-in-golang/) by [Nathan LeClaire](https://nathanleclaire.com/):
+
+```go
+cmdName := "ping"
+cmdArgs := []string{"-c 4", "8.8.8.8"}
+
+cmd := exec.Command(cmdName, cmdArgs...)
+cmdReader, err := cmd.StdoutPipe()
+if err != nil {
+	fmt.Fprintln(os.Stderr, "Error creating StdoutPipe for Cmd", err)
+	os.Exit(1)
+}
+
+scanner := bufio.NewScanner(cmdReader)
+go func() {
+	for scanner.Scan() {
+		fmt.Printf("ping -c 4 8.8.8.8 | %s\n", scanner.Text())
+	}
+}()
+
+err = cmd.Start()
+if err != nil {
+	fmt.Fprintln(os.Stderr, "Error starting Cmd", err)
+	os.Exit(1)
+}
+
+err = cmd.Wait()
+if err != nil {
+	fmt.Fprintln(os.Stderr, "Error waiting for Cmd", err)
+	os.Exit(1)
+}
+
 ```
