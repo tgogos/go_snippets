@@ -59,7 +59,7 @@ func ping_approach_2() {
 // this prints lines while ping is being executed
 //
 func ping_approach_3() {
-	// docker build current directory
+
 	cmdName := "ping"
 	cmdArgs := []string{"-c 4", "8.8.8.8"}
 
