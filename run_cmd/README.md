@@ -75,3 +75,17 @@ if err != nil {
 }
 
 ```
+
+## 4. without waiting... (C)
+
+Found at: [Redirect stdout pipe of child process in Go](https://stackoverflow.com/questions/8875038/redirect-stdout-pipe-of-child-process-in-go).
+
+```go
+cmdName := "ping"
+cmdArgs := []string{"-c 4", "8.8.8.8"}
+
+cmd := exec.Command(cmdName, cmdArgs...)
+cmd.Stdout = os.Stdout
+cmd.Stderr = os.Stderr
+cmd.Run()
+```

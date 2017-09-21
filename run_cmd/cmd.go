@@ -11,9 +11,10 @@ import (
 
 func main() {
 
-	ping_approach_1()
-	ping_approach_2()
-	ping_approach_3()
+	// ping_approach_1()
+	// ping_approach_2()
+	// ping_approach_3()
+	ping_approach_4()
 
 }
 
@@ -88,6 +89,18 @@ func ping_approach_3() {
 		fmt.Fprintln(os.Stderr, "Error waiting for Cmd", err)
 		os.Exit(1)
 	}
+}
+
+func ping_approach_4() {
+	cmdName := "ping"
+	cmdArgs := []string{"-c 4", "8.8.8.8"}
+
+	cmd := exec.Command(cmdName, cmdArgs...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	// cmd.Start()
+	// cmd.Wait()
+	cmd.Run()
 }
 
 func check(err error) {
